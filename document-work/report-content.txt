@@ -1,0 +1,222 @@
+title|CodeMate AI: Code Refactoring and Documentation Assistant
+h1|Project Description:
+p|CodeMate AI is an AI-powered developer productivity application that helps users analyze, improve, understand, and document Python code. It combines local code analysis with Google Gemini generation in a single browser-based workflow. Users can paste source code, upload a Python file, or load a sample program, then inspect quality issues, review refactoring suggestions, request beginner-friendly explanations, and generate project documentation.
+p|The application uses a React frontend and a FastAPI backend. Python AST analysis and Black formatting provide deterministic checks, while Gemini supports refactoring, explanation, README generation, and docstring creation. Its neumorphic interface includes centered top navigation, raised controls, and separate pages for each task. Results can be copied or downloaded for review and use.
+h2|Scenarios
+p|**Scenario 1:** A student uploads a Python grade calculator with unclear variable names and inconsistent formatting. CodeMate AI checks its syntax, reports code-quality issues, and offers Black formatting. The student then requests an explanation to understand the functions and control flow before making changes.
+p|**Scenario 2:** A developer pastes a repetitive utility function and selects AI Refactor. The backend submits a refactoring prompt to Gemini and returns revised code, an explanation, a diff, and before-and-after analysis. The developer reviews these outputs and tests representative inputs before adopting the revision.
+p|**Scenario 3:** A project team needs documentation for a Python module. The Documentation page generates a README and function docstrings from the submitted code. The team checks the descriptions against the implementation, copies the Markdown, and downloads the documented Python file.
+page|
+h1|Technical Architecture:
+pic|architecture.png
+p|**Description:** CodeMate AI uses a modular frontend, backend, and AI-service architecture. React collects Python source and user options. The API client sends JSON requests to FastAPI, whose route handlers validate input and dispatch work to dedicated services. AST and Black checks run locally; generation tasks call Google Gemini through the shared Gemini service. Structured responses return to the appropriate React page.
+p|**Data handling:** The current project does not use a relational database. Browser localStorage retains code, results, and settings across reloads. The backend reads its default Gemini key and model from environment configuration. An optional user key can override the server key and is persisted by the frontend. An ER diagram is not applicable to this implementation.
+h2|Pre-requisites:
+list|**Python programming:** Functions, classes, exceptions, virtual environments, and package installation.
+list|**FastAPI and Pydantic:** API routes, request validation, response models, and HTTP status codes.
+list|**React and JavaScript:** Components, hooks, routing, forms, and asynchronous requests.
+list|**Google Gemini integration:** A valid API key and access to a model supported by the account.
+list|**Frontend tooling:** Node.js, npm, Vite, Tailwind CSS, and browser developer tools.
+list|**Version control:** Git, .gitignore, and exclusion of local environment secrets.
+list|**Code-quality tools:** Python AST, Black formatting, and pytest for backend verification.
+page|
+h2|Project Workflow:
+h3|Milestone 1: Model Selection and Architecture
+list|**Activity 1.1:** Configure a Gemini API key through the project environment.
+list|**Activity 1.2:** Select a Gemini model suited to code-generation tasks.
+list|**Activity 1.3:** Define the React, FastAPI, local-analysis, and Gemini interaction flow.
+list|**Activity 1.4:** Set up Python and frontend development dependencies.
+h3|Milestone 2: Core Functionalities Development
+list|**Activity 2.1:** Implement analysis, refactoring, explanation, and documentation services.
+list|**Activity 2.2:** Implement FastAPI routes, schemas, input checks, and error responses.
+h3|Milestone 3: Backend Application Development
+list|**Activity 3.1:** Configure backend/main.py and register feature routers.
+list|**Activity 3.2:** Integrate route handlers, prompt templates, and AI responses.
+list|**Activity 3.3:** Validate generated documentation and Python code.
+h3|Milestone 4: Frontend Development
+list|**Activity 4.1:** Build the responsive React interface with neumorphic controls.
+list|**Activity 4.2:** Connect page actions to APIs and preserve shared application state.
+h3|Milestone 5: Deployment
+list|**Activity 5.1:** Configure local dependencies and environment variables.
+list|**Activity 5.2:** Start both services and verify end-to-end behavior.
+list|**Activity 5.3:** Prepare a production build and document hosting requirements.
+h3|Milestone 6: Conclusion
+list|Summarize project outcomes, limitations, and future enhancements.
+page|
+h1|Milestone 1: Model Selection and Architecture
+p|This milestone establishes application boundaries, AI configuration, and the development environment. CodeMate AI separates deterministic Python checks from generative tasks so that syntax analysis and formatting do not depend on an AI response. Gemini is used where natural-language explanation or code generation is required.
+h3|Activity 1.1: Configure a Gemini API Key
+p|**Step 1 - Obtain access:** Use a Google account with Gemini API access and create a key through Google AI Studio. Keep the key private and use it only in the intended development environment.
+p|**Step 2 - Create the environment file:** Copy .env.example to .env in the project root. Replace the example key with your own value. Do not place a real key in source code or documentation.
+p|**Step 3 - Configure the model:** Set GEMINI_MODEL to a model available to your account. A name appearing in the application's model list does not prove provider availability.
+cmd|GEMINI_API_KEY=your_gemini_api_key_here
+cmd|GEMINI_MODEL=your_available_gemini_model
+p|**Step 4 - Load configuration:** The backend calls load_dotenv(override=True). GeminiService resolves a request-level override first, then an instance value, then the environment value. The health endpoint exposes configuration status without returning the secret key.
+code|from dotenv import load_dotenv\nload_dotenv(override=True)\n\n# Configuration variables consumed by the backend\n# GEMINI_API_KEY\n# GEMINI_MODEL
+p|**Step 5 - Exclude secrets:** Keep .env out of version control. Prefer the server environment key for routine use. A key entered in the current frontend settings is retained in browser localStorage, so avoid storing private keys on shared browsers.
+h3|Activity 1.2: Select the Generative AI Model
+list|**Assess task quality:** Compare clarity of explanations, fidelity of refactored code, and accuracy of README and docstring output.
+list|**Evaluate practical constraints:** Consider account access, response time, request limits, and source-code size.
+list|**Validate behavior:** Use representative snippets and test generated code rather than assuming a valid Python response preserves behavior.
+page|
+h3|Activity 1.3: Define the Application Architecture
+list|**Frontend responsibilities:** Collect code, present samples, display analysis and generated output, and offer copy and download actions. React Router gives each tool a dedicated page.
+list|**Backend responsibilities:** Accept typed requests, reject empty input, invoke the relevant service, and return structured JSON. Routers use the /api prefix.
+list|**Local analysis path:** AST checks and Black formatting operate without a Gemini request. Results include syntax validity, metrics, issue lists, and formatting feedback.
+list|**AI generation path:** Prompt modules define each task. GeminiService handles model selection and generation; feature services process outputs for the UI.
+list|**State boundaries:** AppContext retains code, results, and settings in browser storage. The current application has no account database or shared server-side project history.
+h3|Activity 1.4: Set Up the Development Environment
+p|Use Python 3.11 or later as specified by the project README, plus a Node.js version compatible with the installed Vite version. Open a terminal at the project root and create an isolated Python environment.
+cmd|python -m venv .venv
+cmd|.venv\Scripts\activate
+cmd|python -m pip install -r backend/requirements.txt
+p|Backend requirements include FastAPI, Uvicorn, Pydantic, python-multipart, Google GenAI libraries, Black, pytest, python-dotenv, and httpx. Install frontend dependencies separately:
+cmd|cd frontend
+cmd|npm install
+p|Keep route handling separate from services, prompt templates, data models, and reusable UI components. The active application is organized as follows:
+code|backend/\n    main.py            # FastAPI application\n    routes/            # HTTP endpoints\n    services/          # Analysis and AI logic\n    prompts/           # Generation instructions\n    schemas/           # Pydantic models\n    tests/             # Backend verification\nfrontend/src/\n    pages/             # Introduction and tool screens\n    components/        # Reusable controls\n    context/           # Persistent shared state\n    services/api.js    # HTTP client
+page|
+h1|Milestone 2: Core Functionalities Development
+h3|Activity 2.1: Develop the Core Features
+p|The core workflow begins with a single Python source input and exposes independent tools. Users can run the checks they need without requesting every output at once.
+list|**Code analysis:** Parse Python source, detect supported quality issues, calculate project-defined metrics, and report a health score. Check Black compliance and return a clear error when syntax parsing fails.
+list|**AI refactoring:** Generate revised source, explain changes, and show a diff. Return original and revised analyses with a health-score delta. Review functional correctness separately.
+list|**Code explanation:** Generate a beginner-friendly account of program purpose, functions, control flow, and relevant concepts. Surface syntax warnings where applicable.
+list|**Documentation generation:** Offer README Markdown, documented Python code, or both. Return successful outputs separately and include errors when an individual generation task fails.
+list|**Validation and formatting:** Expose syntax checking and Black formatting as dedicated actions. The validation API also supports an optional test-script action, separate from ordinary static analysis.
+list|**Samples and files:** Provide built-in Python samples and .py uploads so users can start without manually typing a complete program.
+h3|Activity 2.2: Implement the FastAPI Backend
+bold|Process User Input:
+p|Pydantic models define request payloads. CodeRequest contains the source string and optional model and API-key overrides. Documentation and validation add task-specific fields. Route handlers reject blank code before calling their service functions.
+code|class CodeRequest(BaseModel):\n    code: str = Field(..., description="Python source code to process")\n    model: Optional[str] = Field(None)\n    api_key: Optional[str] = Field(None)
+bold|Return Predictable Responses:
+p|Typed response models separate generated content from syntax status, metrics, warnings, and errors. This allows React pages to render useful feedback without interpreting free-form status text. An API failure should remain distinct from a code-quality finding.
+page|
+h1|Milestone 3: Backend Application Development
+p|The active backend entry point is backend/main.py. It creates FastAPI, loads configuration, configures cross-origin access, registers routers, and exposes application metadata. The earlier Streamlit implementation is retained separately; it is not the entry point for the React application.
+h3|Activity 3.1: Configure the Main Application
+p|The following excerpt shows the routing structure. Imports and middleware configuration are omitted for readability; the complete implementation is in backend/main.py.
+code|app = FastAPI(\n    title="CodeMate AI Backend API",\n    description="REST API for CodeMate AI",\n    version="2.0.0",\n)\n\napp.include_router(health.router, prefix="/api")\napp.include_router(analyze.router, prefix="/api")\napp.include_router(refactor.router, prefix="/api")\napp.include_router(explain.router, prefix="/api")\napp.include_router(document.router, prefix="/api")\napp.include_router(validate.router, prefix="/api")\napp.include_router(samples.router, prefix="/api")
+bold|Define the Core Endpoints:
+list|**GET /api/health:** Service status, version, model configuration, and key presence.
+list|**POST /api/analyze:** Syntax status, health score, metrics, issues, and Black feedback.
+list|**POST /api/refactor:** Revised source, explanation, diff, and comparison metrics.
+list|**POST /api/explain:** Explanation and applicable syntax warnings.
+list|**POST /api/document:** README, docstrings, or both according to doc_type.
+list|**POST /api/validate:** Syntax validation, Black formatting, or test processing.
+list|**GET /api/samples and /api/samples/{name}:** Sample listing and source retrieval.
+list|**POST /api/upload:** Python file input through multipart form data.
+p|Interactive API documentation is available at http://localhost:8000/docs while the backend is running. It exposes request and response schemas independently of the frontend.
+page|
+h3|Activity 3.2: Implement Route Handlers and AI Integration
+bold|Analysis Route:
+p|The analysis route checks empty input and delegates AST and formatting work to analyze_code. The response separates syntax validity, issue detection, metrics, and formatting results.
+code|@router.post("/analyze", response_model=AnalysisResponse)\nasync def analyze_python_code(request: CodeRequest):\n    if not request.code or not request.code.strip():\n        raise HTTPException(\n            status_code=400, detail="Cannot analyze empty code."\n        )\n    try:\n        result = analyze_code(request.code)\n        return AnalysisResponse(\n            syntax_valid=result.get("syntax_valid", False),\n            health_score=result.get("health_score", 0),\n            metrics=result.get("metrics", {}),\n            issues=result.get("issues", []),\n            black_compliant=result.get("black_compliant", False),\n            black_message=result.get("black_message", ""),\n            disclaimer=result.get("disclaimer", ""),\n            error=result.get("error"),\n        )\n    except Exception as exc:\n        raise HTTPException(\n            status_code=500, detail=f"Code analysis failed: {exc}"\n        )
+bold|Define Prompt Engineering Responsibilities:
+list|**Refactoring prompts:** Request readable Python while retaining intended behavior and explaining changes. Do not treat stylistic improvement as proof of correctness.
+list|**Explanation prompts:** Request beginner-friendly descriptions of source code, functions, and execution flow.
+list|**Documentation prompts:** Generate README content or docstrings that describe the supplied implementation.
+list|**Result processing:** Keep generated text separate from metadata and errors. Validate generated Python syntax before presenting it for review.
+p|Model requests can fail because of missing keys, account access, provider limits, or unavailable model names. Report these failures clearly and keep the application usable so settings can be revised or the request retried.
+page|
+h3|Activity 3.3: Documentation Output and Validation
+p|The documentation endpoint accepts readme, docstrings, or all. It invokes the matching service functions and retains successful outputs even if another requested output fails. Users can therefore receive partial results with explicit error feedback.
+code|# Excerpt of the documentation route\nif request.doc_type in ("readme", "all"):\n    readme_res = generate_project_readme(\n        code=request.code,\n        override_key=request.api_key,\n        override_model=request.model,\n    )\n    if readme_res.get("success"):\n        readme_markdown = readme_res.get("readme_markdown")\n\nif request.doc_type in ("docstrings", "all"):\n    doc_res = generate_code_docstrings(\n        code=request.code,\n        override_key=request.api_key,\n        override_model=request.model,\n    )\n    if doc_res.get("success"):\n        documented_code = doc_res.get("documented_code")\n        is_syntax_valid = doc_res.get("is_syntax_valid")\n\nsuccess = (readme_markdown is not None) or (documented_code is not None)
+bold|Check Generated Results:
+list|**README content:** Verify installation commands, dependencies, usage examples, and feature descriptions against the actual project. A snippet alone may not establish full deployment requirements.
+list|**Docstrings:** Check parameters, return values, exceptions, and behavior against the implementation. Confirm that adding documentation has not changed executable statements.
+list|**Refactored code:** Review the diff, re-run syntax checks, and exercise representative test cases. A higher health score reflects analyzer rules rather than guaranteed functional equivalence.
+list|**Test execution:** The optional test action runs code in a subprocess. Process separation and timeouts are not a complete security sandbox for untrusted public workloads.
+p|Keep local validation available when AI generation is unavailable. Users should still be able to inspect syntax and format Python without making a model request.
+page|
+h1|Milestone 4: Frontend Development
+p|The frontend is a React application built with Vite and Tailwind CSS. It presents a project introduction followed by dedicated workflow pages. The visual design uses a soft blue-gray background, raised cards, inset active controls, and a centered top navigation bar.
+h3|Activity 4.1: Design the User Interface
+bold|Set Up the Page Structure:
+list|**Introduction:** Explain the project, show an illustrative code transformation, and provide an Open workspace action.
+list|**Workspace:** Provide a Monaco editor, sample selector, upload action, syntax validation, Black formatting, and shortcuts to the other tools.
+list|**Feature pages:** Give Analysis, Refactor, Explain, and Docs dedicated routes and focused result areas.
+list|**About:** Present supporting project information alongside the tool workflow.
+bold|Apply the Neumorphic Design:
+p|Shared CSS variables define the background, text, accent, raised shadows, and inset shadows. Cards and navigation controls use opposing light and dark shadows to create depth. Active navigation appears recessed, while task buttons use blue, purple, green, and amber colors. Keyboard focus indicators and readable disabled states remain visible.
+code|:root {\n  --color-background: #e8edf2;\n  --color-card: #e8edf2;\n  --color-accent: #496bd1;\n  --neo-raised: 8px 8px 20px #cbd3dd, -8px -8px 20px #ffffff;\n  --neo-inset: inset 4px 4px 9px #cbd3dd,\n               inset -4px -4px 9px #ffffff;\n}
+bold|Adapt to Different Screen Sizes:
+p|Use flexible navigation, wrapping action rows, and responsive grids. On narrower screens the hero becomes one column and feature cards stack. Shared focus styles and reduced-motion rules support keyboard navigation and motion preferences. Text contrast should remain clear even where shadows provide most of the visual separation.
+page|
+h3|Activity 4.2: Connect the Frontend to the Backend
+p|The API service centralizes HTTP requests and converts non-success responses into readable errors. VITE_API_URL overrides the default http://localhost:8000 base URL. Vite also defines a local /api proxy, but the current client default calls the backend directly.
+code|const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";\n\nexport const analyzeCode = (code) =>\n  apiFetch("/api/analyze", {\n    method: "POST",\n    body: JSON.stringify({ code }),\n  });\n\nexport const documentCode = (code, docType = "readme", apiKey = "", model = "") =>\n  apiFetch("/api/document", {\n    method: "POST",\n    body: JSON.stringify({\n      code,\n      doc_type: docType,\n      api_key: apiKey || undefined,\n      model: model || undefined,\n    }),\n  });
+bold|Preserve State Across Pages:
+p|AppContext retains source code and generated results so that switching tools does not discard work. It synchronizes selected values with localStorage. When source code changes, dependent results should be invalidated so stale output is not mistaken for analysis of the new input.
+bold|Handle Loading and Errors:
+p|Page actions disable the relevant generation control while a request is pending, show progress, and restore controls after completion. Errors appear within the workflow. Blank source input is rejected before unnecessary generation requests.
+bold|Render and Export Results:
+list|**Analysis:** Show health and metrics alongside issue details.
+list|**Refactoring:** Present original and revised source with explanation and diff views.
+list|**Explanation and documentation:** Render Markdown in a readable output area.
+list|**Copy and download:** Copy output with feedback or create a browser download containing the generated text. Download buttons use a strong blue surface and readable disabled styling.
+page|
+h1|Milestone 5: Deployment
+p|The current project runs as two local services: a FastAPI server and a Vite development server. Start both before testing the complete workflow. A production build prepares frontend assets; public hosting requires additional configuration and is separate from local startup.
+h3|Activity 5.1: Prepare the Local Environment
+p|Install backend packages in the Python environment, install frontend dependencies, and configure the root .env file. Keep the backend working directory at the project root so imports and environment loading resolve consistently.
+cmd|python -m pip install -r backend/requirements.txt
+cmd|cd frontend
+cmd|npm install
+h3|Activity 5.2: Start and Verify Both Services
+bold|Terminal 1 - Backend from the project root:
+cmd|python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+bold|Terminal 2 - Frontend from the frontend directory:
+cmd|node node_modules/vite/bin/vite.js
+p|The direct Node command avoids the npm command-wrapper issue observed with the ampersand in this project folder name on Windows. Where the shell and path do not have that issue, npm run dev invokes the same Vite server.
+list|**Open the interface:** Visit http://localhost:5173 and confirm that the introduction and navigation load.
+list|**Check API status:** Open http://localhost:8000/api/health. A configured key status means a key is present; it does not confirm provider access.
+list|**Inspect the API:** Open http://localhost:8000/docs to examine endpoint schemas.
+list|**Try local checks:** Load a sample, validate its syntax, and apply Black formatting.
+list|**Try AI features:** Request refactoring, explanation, and documentation with a valid key and model. Inspect and download the results.
+p|If a port is occupied, identify the existing process before starting another instance. If the UI cannot reach the API, check the backend address, VITE_API_URL, and cross-origin settings.
+page|
+h3|Activity 5.3: Build and Prepare for Hosting
+p|Build from the frontend directory. Vite writes assets to frontend/dist. The direct build command used for this project is:
+cmd|node node_modules/vite/bin/vite.js build
+p|For hosting, configure VITE_API_URL for the reachable API origin before building. A remote user's browser cannot reach your server through localhost:8000. Serve the frontend with fallback to index.html for React Router paths, and run FastAPI behind an appropriate application server and HTTPS endpoint.
+bold|Configuration to Review Before Public Hosting:
+list|**API origin policy:** Replace the development wildcard cross-origin policy with the intended frontend origin and compatible credentials settings.
+list|**Secret management:** Supply the Gemini key through the server environment. Do not distribute keys in static files or screenshots.
+list|**Request controls:** Add suitable authentication, rate limits, and upload/request size limits for the intended users.
+list|**Execution isolation:** Disable or harden the optional test endpoint before accepting untrusted public code. A subprocess alone is not sufficient isolation.
+list|**State and privacy:** Review browser persistence and key overrides. Shared deployment may need account-aware storage and explicit data-clearing controls.
+bold|Verification Checklist:
+list|Empty input produces useful feedback instead of starting generation.
+list|Invalid Python produces a syntax message with location details.
+list|Analysis and formatting work without invoking Gemini.
+list|A failed model request leaves the UI usable and shows an error.
+list|Changing routes preserves the current code and expected results.
+list|Downloaded files contain the displayed README or Python output.
+list|Direct feature links work after refreshing a hosted page.
+p|Run repository tests separately from a manual walkthrough. A successful frontend build checks bundling; it does not verify generated code or provider availability.
+cmd|python -m pytest backend/tests -v
+page|
+h1|Exploring the Website's Web Pages:
+h2|Home / Introduction Page:
+pic|intro.png
+p|**Description:** The landing page introduces CodeMate AI and its Python development workflow. Centered top navigation replaces the earlier side panel. The hero explains the project and presents an illustrative refactoring example. Open workspace leads into the tool; Discover the project moves to the feature overview.
+p|Raised cards, a soft blue-gray surface, and inset active navigation create the neumorphic appearance. The overview describes analysis, refactoring, explanation, and documentation. A short workflow explains how to bring in code, improve it, and export the results.
+h2|Navigation and Settings:
+p|The navigation provides Intro, Workspace, Analysis, Refactor, Explain, Docs, and About links. Settings opens a compact panel for model selection, an optional key override, and session controls. Result indicators can appear on relevant links after completed actions.
+page|
+h2|Code Workspace:
+pic|workspace.png
+p|**Description:** The workspace is the main input area. Users can paste Python into the editor, upload a .py file, or select a built-in sample. Line numbers and syntax highlighting help inspect the source. A copy action and line/character counts support the editing workflow.
+p|Validate Syntax checks parsing. Format with Black applies consistent formatting. Clear removes active code. These controls use raised neumorphic surfaces, with a dark slate formatting button and red text for Clear. When code is present, colored shortcuts lead to the other tools.
+h2|Analysis, Refactoring, and Explanation:
+p|Analysis presents quality findings and metrics. Refactoring displays revised code with explanations and comparisons. Explanation provides a readable account of program behavior. All these views share source through AppContext, so users do not need to paste code repeatedly.
+p|Syntax validity, a health score, and an AI explanation each describe a different aspect of the source. None alone proves that a program meets its intended requirements. Review output alongside tests and expected behavior.
+page|
+h2|Documentation Generator:
+pic|documentation.png
+p|**Description:** The Documentation page shows active Python source and offers Generate README and Add Docstrings actions. Optional model and key fields configure the generation request. The screenshot shows the input stage before generation.
+p|After generation, the README tab presents Markdown with copy and download actions. Documented code can be downloaded as a Python file. Review generated descriptions against actual behavior, especially where the source does not establish setup or deployment requirements.
+h1|Milestone 6: Conclusion
+p|CodeMate AI combines Python analysis, AI-assisted refactoring, explanation, and documentation in a React and FastAPI application. Its modular backend separates route handling, local checks, prompts, and AI integration. The frontend provides persistent code state, focused tool pages, and downloadable outputs through a consistent neumorphic interface.
+p|The project demonstrates how deterministic checks and generative assistance can support code understanding and maintenance. Current limitations include model-dependent output quality, browser-local persistence, and development-oriented server configuration. Future enhancements can include stronger behavioral testing, safer execution isolation, account-aware history, and additional language support. Each extension should retain the review step that keeps users in control of generated changes.

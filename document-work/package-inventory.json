@@ -1,0 +1,172 @@
+{
+  "word/header1.xml": {
+    "bytes": 4029,
+    "sha256": "487aaa2bd80af25585f75eb9d78ca90409b2fbf411b5b0834f71fa872740b2af",
+    "policy": "preserve"
+  },
+  "word/_rels/header1.xml.rels": {
+    "bytes": 421,
+    "sha256": "f7ab34582ef0eed4996a802d6d1a6d35103b3fd86583c5c483df1e86cf29d898",
+    "policy": "preserve"
+  },
+  "word/numbering.xml": {
+    "bytes": 5345,
+    "sha256": "1c616ff661e9f9251772a8b34d943b7d05c8c5ca0127056f6ffa4f5f2ef344a5",
+    "policy": "preserve"
+  },
+  "word/settings.xml": {
+    "bytes": 2152,
+    "sha256": "26f2853fde05b88d4b0a9da0bb016d56a896901f60c9272dddf33c3f3fa61e4a",
+    "policy": "preserve"
+  },
+  "word/fontTable.xml": {
+    "bytes": 2217,
+    "sha256": "d129aed58e0273dd13bacad8afa284f57110da446915e168887f72b441455f20",
+    "policy": "preserve"
+  },
+  "word/_rels/fontTable.xml.rels": {
+    "bytes": 711,
+    "sha256": "b373e15f5ed011b9141c82e7b9a9d2e96981d7206222159f29c2a0e6e561fb28",
+    "policy": "preserve"
+  },
+  "word/styles.xml": {
+    "bytes": 9866,
+    "sha256": "e49bc71f78c2781555402cb1027353fa9f0aba6fca55380e860fd9ff2d76012a",
+    "policy": "preserve"
+  },
+  "customXML/itemProps1.xml": {
+    "bytes": 404,
+    "sha256": "fc2e321bb5ca54d5f2b99b99f91d681d004417098918a318be88fe525218c9a3",
+    "policy": "preserve"
+  },
+  "customXML/item1.xml": {
+    "bytes": 485,
+    "sha256": "8cee64365cfd5411ddfcc72433101973777e1ffab930fc05aa19ff215f9b036e",
+    "policy": "preserve"
+  },
+  "customXML/_rels/item1.xml.rels": {
+    "bytes": 295,
+    "sha256": "26ac718f80df621ee703e3c0f143a63034967c5fe65fbfdcefbf96419235355e",
+    "policy": "preserve"
+  },
+  "word/document.xml": {
+    "bytes": 544640,
+    "sha256": "4feedbb322429fc9c63b4e1d9ef83b622dd6e4610f4c463f9e519a67df829031",
+    "policy": "editable"
+  },
+  "word/_rels/document.xml.rels": {
+    "bytes": 4571,
+    "sha256": "5526cea95da41a151f94cb30329623a3246898c16872a028c5cf2a9f2d56d317",
+    "policy": "editable"
+  },
+  "_rels/.rels": {
+    "bytes": 298,
+    "sha256": "1cc87395d4a229f21c23af406724de12dd9454071925f983e4b648a7b2be8cc5",
+    "policy": "preserve"
+  },
+  "word/media/image15.jpg": {
+    "bytes": 30613,
+    "sha256": "9b0cc0e91c423bf917d5c49c647b883bd3a3d1df26cbcd31937e0732d54dd0db",
+    "policy": "preserve"
+  },
+  "word/theme/theme1.xml": {
+    "bytes": 7643,
+    "sha256": "b2295d3198893d2c03f5e584c749a15751b798aefdcd9bee2889f13903d68cb2",
+    "policy": "preserve"
+  },
+  "word/media/image3.png": {
+    "bytes": 59818,
+    "sha256": "3173e18e234eb601a5f540dcdbccad8b8ed77d4644577e90c101020012ed28e7",
+    "policy": "preserve"
+  },
+  "word/media/image1.png": {
+    "bytes": 48494,
+    "sha256": "6e30afd1ce804bbeb42f8f80b35927208403491f056e5df2a4eaadedc73a53eb",
+    "policy": "preserve"
+  },
+  "word/media/image13.jpg": {
+    "bytes": 62855,
+    "sha256": "45da5ae5d638f054c9acd0fab710eb2c380f54b792e5c7ffa23c2b03b86b67cf",
+    "policy": "preserve"
+  },
+  "word/media/image12.jpg": {
+    "bytes": 61322,
+    "sha256": "e3d2a8fe7e3adfa2557c5922fe658945b733efb478f83057d1035a2c282321ba",
+    "policy": "preserve"
+  },
+  "word/media/image4.png": {
+    "bytes": 52403,
+    "sha256": "6ee5f28cc510cc4827d9b528d0c745b1fcebac7c375863a439887d6fce4e74cc",
+    "policy": "preserve"
+  },
+  "word/media/image6.png": {
+    "bytes": 14345,
+    "sha256": "fa7a94c65f21ead74e57101dafb78f383c88f9f1e01e9bb33cc4d62a89ea242b",
+    "policy": "preserve"
+  },
+  "word/media/image8.png": {
+    "bytes": 61968,
+    "sha256": "464012199c6dd849e89f4e4a9b05728bf5066a689a02d0023714a25777336f3b",
+    "policy": "preserve"
+  },
+  "word/media/image2.png": {
+    "bytes": 124139,
+    "sha256": "20e768a89bbcc464d1a76d901eb0b302b167d897a75256adde2f9081458a1777",
+    "policy": "preserve"
+  },
+  "word/fonts/Roboto-regular.ttf": {
+    "bytes": 123720,
+    "sha256": "71d21deeca53f0639b3610d060a96f744deb092c1c3ca4fd9afd4bcec5edf04d",
+    "policy": "preserve"
+  },
+  "word/fonts/Roboto-bold.ttf": {
+    "bytes": 124292,
+    "sha256": "a2b79ad5a8403ff7fb2a2f07fcc793477abdb11df9f0751fbf99acbad309dcb2",
+    "policy": "preserve"
+  },
+  "word/fonts/Roboto-italic.ttf": {
+    "bytes": 127988,
+    "sha256": "e2874eccd06cb6a29a7ab76cce45bc1a6249340ef797a1051b145178bfa168bd",
+    "policy": "preserve"
+  },
+  "word/fonts/Roboto-boldItalic.ttf": {
+    "bytes": 128772,
+    "sha256": "65ba39b2916d2925f022b20cca96910ca9b984832ce0ec6ee211fdc12895905c",
+    "policy": "preserve"
+  },
+  "word/media/image11.jpg": {
+    "bytes": 53596,
+    "sha256": "850b83c8e037d1fbdd184fd6ba439dc8500ae9c0a7e86506ecc34c4e619c9700",
+    "policy": "preserve"
+  },
+  "word/media/image5.png": {
+    "bytes": 204057,
+    "sha256": "29bb0e9b65a298b50dd311b1eb658dd6b92195685344be385ec53a1134676b48",
+    "policy": "preserve"
+  },
+  "word/media/image9.png": {
+    "bytes": 48083,
+    "sha256": "ef2d81bbceb1d07d3461134f491dbea9d731bcf9d985baef852aeb761b1c3fd4",
+    "policy": "preserve"
+  },
+  "word/media/image14.png": {
+    "bytes": 15469,
+    "sha256": "a93062cbac556bf844d46fd9975b7427b6f28a4994bcad90327a66cad2650565",
+    "policy": "preserve"
+  },
+  "word/media/image10.png": {
+    "bytes": 61772,
+    "sha256": "78de08431fdd1de213d07eb11ab5cf6f722259945558c66f855a1fd59afa5b90",
+    "policy": "preserve"
+  },
+  "word/media/image7.png": {
+    "bytes": 79982,
+    "sha256": "daf1b86b4fb0cd76e2be8003c62754869066e6bdf385418548fc2a818f4e915b",
+    "policy": "preserve"
+  },
+  "[Content_Types].xml": {
+    "bytes": 1669,
+    "sha256": "b0084b11858a603d3b9e2271a44f250625214da8c7bcd341dad89533bdb58881",
+    "policy": "editable"
+  }
+}
