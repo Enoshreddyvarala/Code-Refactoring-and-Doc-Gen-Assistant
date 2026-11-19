@@ -63,7 +63,7 @@ codemate-ai/
 │   └── requirements.txt
 │
 ├── legacy_streamlit/           ← Original Streamlit app (preserved)
-├── .env                        ← Gemini API key (do not commit)
+├── .env                        ← Gemini API key
 ├── .env.example                ← Template for environment setup
 ├── .gitignore
 └── README.md
